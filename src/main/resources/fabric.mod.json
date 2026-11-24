@@ -3,14 +3,11 @@
   "id": "mikumiku",
   "version": "${version}",
   "name": "Miku Addon",
-  "description": "Meteor Miku addon ported to Evernight: combat, movement, player, build and HUD utilities.",
+  "description": "Miku addon for Evernight: the modules meteor-miku offers that Evernight does not already have (build, movement tweaks, utility, HUD).",
   "authors": [
     "mikumiku",
     "Evernight port"
   ],
-  "contact": {
-    "sources": "https://github.com/Evernight-Client/Evernight"
-  },
   "environment": "client",
   "entrypoints": {
     "evernight-addon": [
