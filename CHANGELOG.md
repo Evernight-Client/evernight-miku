@@ -7,13 +7,14 @@
 ### 新增
 
 - 3 个插件分类：`Miku` / `Miku 建设` / `Miku 特调`（`AddonContext.registerCategory`）
+- `Printer`：读取 `.litematic` 投影并在身边重建，无需 Litematica
 - `PotCountHud`：溅射药水数量 + 抗性剩余时间
 - 设置项 tooltip 的中英描述，修复显示原始语言键的问题
 
 ### 变更
 
 - 依赖升级到 `evernight-1.0.3.jar`（`depends.evernight >= 1.0.3`）
-- 模块集合：18 个，覆盖建造、移动特调、实用工具与 HUD
+- 模块集合：19 个，覆盖建造、移动特调、实用工具与 HUD
 - 源码树不再提交第三方 jar 与映射表，改由 `tools/prepare.py` 生成
 
 ### 修复
