@@ -10,7 +10,7 @@
 
 - 目标环境：Minecraft 1.21.11 · Fabric · **Evernight 1.0.3+** · Java 21
 - 插件 id：`mikumiku`，入口 `evernight-addon`
-- 当前 **18 个模块**：与本体重复的 30 个模块已移除（清单见下），只保留互补功能
+- 当前 **18 个模块**：建造、移动特调、实用工具与 HUD
 - 使用 1.0.3 的 `AddonContext.registerCategory` 注册 3 个专属分类：**Miku / Miku 建设 / Miku 特调**
 
 ## 安装
@@ -73,7 +73,7 @@ javac @javac.args && java @java.args
 `VerifyRemap` 是必须的：`named2int.tiny` 的成员列顺序一旦写反，字段/方法名不会重映射，
 编译能过、类能加载，但进游戏第一次访问 MC 成员就会 `NoSuchMethodError`。
 
-## 已移植模块（18）
+## 模块（18）
 
 ### Miku（8）
 
@@ -112,53 +112,6 @@ javac @javac.args && java @java.args
 | 模块 | 原模块 | 说明 |
 | --- | --- | --- |
 | `PotCountHud` | 药水计数 | 溅射药水数量 + 抗性剩余时间 |
-
-## 与本体重复、已移除的模块（30）
-
-| 原模块 | Evernight 对应 | 说明 |
-| --- | --- | --- |
-| VelocityPlus / AntiKnockbackPlus | `Velocity` | 击退缩放与取消 |
-| CriticalsPlus | `Criticals` | 刀刀暴击 |
-| SurroundPlus | `FeetPlace` | 围脚放黑曜石 |
-| SelfTrapPlus | `SelfTrap` | 包裹自己 |
-| HoleSnapPlus | `HoleSnap` | 进坑 |
-| AutoHoleFillPlus | `HoleFill` | 填坑 |
-| AutoCrystalPlus | `AutoCrystal` | 水晶光环 |
-| AnchorAuraPlus | `AnchorAura` | 锚爆光环 |
-| AutoCrystalBlock | `Blocker` | 挡水晶位 |
-| KillAuraPlus | `Aura` | 杀戮光环 |
-| MaceComboPlus | `AutoMace` | 锤子连击 |
-| AutoLogPlus | `AutoLog` | 危险自动断连 |
-| AutoEzPlus | `Announcer` | 击杀播报 |
-| AutoTrashPlus | `InventoryCleaner` | 自动扔垃圾 |
-| AutoXPPlus | `AutoExp` | 自动修装备 |
-| AutoChorusFruitPlus | `ChorusControl` | 紫颂果传送控制 |
-| ScaffoldPlus | `Scaffold` | 自动搭路 |
-| NukerPlus | `Nuker` | 范围挖掘 |
-| AutoMinerPlus | `Nuker` / `AutoMine` | 白名单挖方块 |
-| LiquidFillerPlus | `SourceFill` | 填水 |
-| OneKeyPearl | `KeyPearl` | 一键珍珠 |
-| AutoMinecartPlus | `AutoMount` | 自动上矿车 |
-| AutoUseItems | `AutoPot` / `AutoEat` | 低血自动吃药 |
-| PhasePlus | `Phase` | 穿墙 |
-| ElytraFlyPlus | `ElytraFly` | 鞘翅平飞 |
-| TridentFlyPlus | `Trident` | 三叉戟飞行 |
-| NoFallPlus | `NoFall` | 无摔伤 |
-| FastFallPlus | `FastFall` | 快速下落 |
-| MikuInfoHud | `Metrics` / `Position` | 坐标/速度/延迟 HUD |
-
-被移除的源码没有删掉，放在 `../old-versions/removed-modules/`，需要时可以直接拿回来重新注册。
-
-## 未移植的模块（功能依赖）
-
-| 原模块 | 原因 |
-| --- | --- |
-| BaritoneHelperModule / HighwayClearer / HighwayBlocker / RoadBuilder / NetherSearchArea | 依赖 Baritone 路径任务 API，需要按 `ClientContext.baritoneBridge` 重写 |
-| SeedMine / StructureFinder / BedrockFinder / ElytraFinder | 依赖内置 `com.seedfinding` 库 |
-| BestPrinter / LitematicaMover | 依赖 Litematica 投影数据 |
-| MassExtractor / UniversalSupply / ShulkerBoxItemFetcher / AutoElytraHarvester | 数百到数千行的多状态机 |
-| VillagerTrader / VillagerRoller / FarmHelper / AutoSort / AutoCraft | 村民交易表、配方匹配、容器排序（本体有 `AutoTrade` / `AutoCraft` / `InventorySorter` / `AutoFarm`） |
-| AutoWither / PearlMark / FakeCoordinates / EntityList / UserGuide / HudMiku | 需要额外渲染管线或 mixin |
 
 ## 目录结构
 
