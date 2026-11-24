@@ -1,0 +1,203 @@
+# Miku Addon for Evernight
+
+把 Meteor Client 插件 **meteor-miku** 里 **Evernight 本体没有的功能**移植到 Evernight 的插件框架。
+
+- 目标环境：Minecraft 1.21.11 · Fabric · **Evernight 1.0.3+** · Java 21
+- 插件 id：`mikumiku`，入口 `evernight-addon`
+- 当前 **18 个模块**：与本体重复的 30 个模块已移除（清单见下），只保留互补功能
+- 使用 1.0.3 的 `AddonContext.registerCategory` 注册 3 个专属分类：**Miku / Miku 建设 / Miku 特调**
+
+## 安装
+
+1. 安装 Fabric Loader 0.19.5+、Fabric API、Evernight 1.0.3（1.21.11）。
+2. 把 `build/libs/evernight-miku-1.1.0.jar` 放进 `.minecraft/mods/`。
+3. 启动游戏，日志出现 `Loaded addon Miku Addon 1.1.0 (mikumiku)`；游戏内 `;addons` 可查看插件与模块数。
+
+模块出现在 ClickGUI 的 Miku / Miku 建设 / Miku 特调 分类下（排在原生分类之后），中文名来自
+`assets/mikumiku/lang/zh_cn.json`（英文客户端显示英文名）。
+
+## 从源码构建
+
+克隆后先跑一次准备脚本（生成映射表、下载并重映射本体 jar，仓库里不提交这些大文件）：
+
+```bash
+python tools/prepare.py   # 需要本机已有 Loom 缓存的 1.21.11 映射
+```
+
+工程是标准 Loom 工程（`build.gradle`），Loom 1.18.4 需要 **JDK 25**：
+
+```bash
+./gradlew build        # 产物 build/libs/evernight-miku-1.1.0.jar
+```
+
+如果本机只有 JDK 21（Loom 1.18.4 无法启动），用离线脚本，效果等价：
+
+```bash
+python tools/build.py  # javac -> tiny-remapper(named→intermediary) -> 打包
+```
+
+脚本依赖 Loom 已缓存的 named Minecraft jar、`libs/evernight-named.jar`（本体 jar 的 named 重映射版）
+和 Gradle 缓存里的 tiny-remapper / ASM / brigadier / gson / netty。
+
+改语言表后运行 `python tools/gen_lang.py` 重新生成两份 JSON（键集合保持一致，词条表在 `tools/lang_seed.json`）。
+
+### 构建后自检（重要）
+
+`tools/verify/` 下有三个检查器，改动后建议都跑一遍：
+
+```bash
+# 1) 所有 Minecraft 成员引用都能在 intermediary 目标 jar 里解析
+javac -cp "<asm>;<asm-tree>" -d build/verify tools/verify/VerifyRemap.java
+java -cp "build/verify;<asm>;<asm-tree>" VerifyRemap build/libs/evernight-miku-1.1.0.jar <minecraft-merged-intermediary.jar>
+# 期望输出：checked=346 missing=0
+
+# 2) 所有 class 能在 MC + 本体 jar 上加载
+javac -d build/verify tools/verify/CheckJar.java
+java -cp build/verify CheckJar build/libs/evernight-miku-1.1.0.jar <mc.jar> <evernight.jar> <brigadier> <gson> <slf4j>
+# 期望输出：ok=25 fail=0
+
+# 3) 模块构造函数（需要真实依赖 classpath）
+javac @javac.args && java @java.args
+# 期望输出：ok=17 fail=0
+```
+
+`VerifyRemap` 是必须的：`named2int.tiny` 的成员列顺序一旦写反，字段/方法名不会重映射，
+编译能过、类能加载，但进游戏第一次访问 MC 成员就会 `NoSuchMethodError`。
+
+## 已移植模块（18）
+
+### Miku（8）
+
+| 模块 | 原模块 | 说明 |
+| --- | --- | --- |
+| `FishingRodFace` | 鱼竿糊脸 | 对最近敌人甩鱼竿 |
+| `DeathCommand` | 死亡自动指令 | 死亡后自动发送自定义指令 |
+| `AutoLoginPlus` | 自动登录Plus | 进服后按模板发送 `/login` |
+| `AutoSM` | 自动社交 | 定时发送社交消息 |
+| `PlayerAlertPlus` | 看门狗 | 指定玩家进入范围时提醒 |
+| `HandsomeSpin` | 靓仔转圈 | 角色持续旋转 |
+| `InventoryPrinter` | 库存打印 | 把背包内容打到聊天栏 |
+| `ChestAuraPlus` | 翻箱倒柜 | 自动打开附近箱子（不拿东西） |
+
+### Miku 建设（4）
+
+| 模块 | 原模块 | 说明 |
+| --- | --- | --- |
+| `AutoSlabPlus` | 铺半砖+ | 地面自动铺半砖防刷怪 |
+| `TreeAuraPlus` | 自动种树 | 在周围放树苗 |
+| `AutoDigFeet` | 脚下挖掘 | 挖掉挡路的脚前方块 |
+| `AutoTouchFire` | 自动消防 | 扑灭周围火焰 |
+
+### Miku 特调（5）
+
+| 模块 | 原模块 | 说明 |
+| --- | --- | --- |
+| `HoverPlus` | 悬停 | 空中保持位置（按跳跃键触发） |
+| `ElytraArmorSwitch` | 自动鞘翅切换 | 地面穿胸甲、空中换鞘翅 |
+| `ElytraUnbreak` | 无限耐久鞘翅 | 低耐久自动换鞘翅，可选自动烟花 |
+| `AutoFollowPlayer` | 跟随玩家 | 朝指定玩家移动 |
+| `AutoBlockCenter` | 自动居中 | 自动站到方块中心 |
+
+### HUD（1）
+
+| 模块 | 原模块 | 说明 |
+| --- | --- | --- |
+| `PotCountHud` | 药水计数 | 溅射药水数量 + 抗性剩余时间 |
+
+## 与本体重复、已移除的模块（30）
+
+| 原模块 | Evernight 对应 | 说明 |
+| --- | --- | --- |
+| VelocityPlus / AntiKnockbackPlus | `Velocity` | 击退缩放与取消 |
+| CriticalsPlus | `Criticals` | 刀刀暴击 |
+| SurroundPlus | `FeetPlace` | 围脚放黑曜石 |
+| SelfTrapPlus | `SelfTrap` | 包裹自己 |
+| HoleSnapPlus | `HoleSnap` | 进坑 |
+| AutoHoleFillPlus | `HoleFill` | 填坑 |
+| AutoCrystalPlus | `AutoCrystal` | 水晶光环 |
+| AnchorAuraPlus | `AnchorAura` | 锚爆光环 |
+| AutoCrystalBlock | `Blocker` | 挡水晶位 |
+| KillAuraPlus | `Aura` | 杀戮光环 |
+| MaceComboPlus | `AutoMace` | 锤子连击 |
+| AutoLogPlus | `AutoLog` | 危险自动断连 |
+| AutoEzPlus | `Announcer` | 击杀播报 |
+| AutoTrashPlus | `InventoryCleaner` | 自动扔垃圾 |
+| AutoXPPlus | `AutoExp` | 自动修装备 |
+| AutoChorusFruitPlus | `ChorusControl` | 紫颂果传送控制 |
+| ScaffoldPlus | `Scaffold` | 自动搭路 |
+| NukerPlus | `Nuker` | 范围挖掘 |
+| AutoMinerPlus | `Nuker` / `AutoMine` | 白名单挖方块 |
+| LiquidFillerPlus | `SourceFill` | 填水 |
+| OneKeyPearl | `KeyPearl` | 一键珍珠 |
+| AutoMinecartPlus | `AutoMount` | 自动上矿车 |
+| AutoUseItems | `AutoPot` / `AutoEat` | 低血自动吃药 |
+| PhasePlus | `Phase` | 穿墙 |
+| ElytraFlyPlus | `ElytraFly` | 鞘翅平飞 |
+| TridentFlyPlus | `Trident` | 三叉戟飞行 |
+| NoFallPlus | `NoFall` | 无摔伤 |
+| FastFallPlus | `FastFall` | 快速下落 |
+| MikuInfoHud | `Metrics` / `Position` | 坐标/速度/延迟 HUD |
+
+被移除的源码没有删掉，放在 `../old-versions/removed-modules/`，需要时可以直接拿回来重新注册。
+
+## 未移植的模块（功能依赖）
+
+| 原模块 | 原因 |
+| --- | --- |
+| BaritoneHelperModule / HighwayClearer / HighwayBlocker / RoadBuilder / NetherSearchArea | 依赖 Baritone 路径任务 API，需要按 `ClientContext.baritoneBridge` 重写 |
+| SeedMine / StructureFinder / BedrockFinder / ElytraFinder | 依赖内置 `com.seedfinding` 库 |
+| BestPrinter / LitematicaMover | 依赖 Litematica 投影数据 |
+| MassExtractor / UniversalSupply / ShulkerBoxItemFetcher / AutoElytraHarvester | 数百到数千行的多状态机 |
+| VillagerTrader / VillagerRoller / FarmHelper / AutoSort / AutoCraft | 村民交易表、配方匹配、容器排序（本体有 `AutoTrade` / `AutoCraft` / `InventorySorter` / `AutoFarm`） |
+| AutoWither / PearlMark / FakeCoordinates / EntityList / UserGuide / HudMiku | 需要额外渲染管线或 mixin |
+
+## 目录结构
+
+```
+evernight-miku/
+├── build.gradle / settings.gradle / gradle.properties   Loom 工程
+├── libs/evernight-1.0.3.jar                             本体发行 jar
+├── libs/evernight-named.jar                             本体 named 重映射（离线构建用）
+├── src/main/java/com/github/mikumiku/evernight/
+│   ├── MikuAddon.java        入口（EvernightAddon）
+│   ├── MikuCategories.java   Miku / Miku 建设 / Miku 特调 分类注册
+│   ├── MikuModule.java       模块基类（AddonModule）
+│   ├── MikuHudModule.java    HUD 基类（HudWidgetModule + addons 命名空间）
+│   ├── MikuModules.java      注册表（一行一个模块）
+│   ├── MikuCommand.java      ;miku 指令
+│   ├── modules/              17 个模块
+│   └── util/MikuUtils.java   放置/旋转/搜索等公共工具
+├── src/main/resources/
+│   ├── fabric.mod.json
+│   └── assets/mikumiku/lang/{en_us,zh_cn}.json
+└── tools/
+    ├── build.py              离线构建（javac + tiny-remapper + 打包）
+    ├── gen_lang.py           语言表生成
+    ├── int2named.tiny        intermediary → named
+    ├── named2int.tiny        named → intermediary
+    └── verify/               VerifyRemap / CheckJar / BaritoneProbe / CtorTest
+```
+
+## 与 1.0.3 的适配
+
+- 依赖 `evernight-1.0.3.jar`（`depends.evernight >= 1.0.3`），`ModuleCategory` 由枚举改成 final class 对本工程源码兼容。
+- `MikuCategories` 在 `onInitialize` 里先 `registerCategory` 再注册模块（模块会记住构造时的分类实例），注册失败回退内置分类。
+- 1.0.3 的 `AddonModule` 不再使用 Java 里的 description 兜底，所有显示文本都来自语言表。
+- **设置提示文字的命名空间限制**：ClickGUI 的设置 tooltip 走 `Translations.settingDescription(module, setting)`，内部硬编码 `evernight.descriptions.settings.<模块>.<设置>`，1.0.3 没有插件命名空间的重载。为了不让 tooltip 显示原始键，`gen_lang.py` 会额外生成这组键（按本插件唯一的模块名限定，不会与本体模块冲突）；模块名和设置名仍只放在 `addons.mikumiku.*`。这是上游缺口，等本体提供 addon-aware 重载后可以删掉。
+- 1.0.3 修复了「未安装 Baritone 时反射 `BaritoneModule` 字段崩溃」的问题，Baritone 现在是可选的（已用 `BaritoneProbe` 验证）。
+
+## 实现备注
+
+- 所有模块继承 `AddonModule`，模块名是稳定的英文标识（指令/配置键/预设依赖它），中文只出现在语言表。
+- 事件使用本体的 `@EventHandler`（`MinecraftTickEvent`、`PacketEvent.Receive`、`PlayerAttackEvent`、
+  `ChatMessageEvent` 等），模块 `enable()` 时自动订阅、`disable()` 自动退订。
+- 放置方块统一走 `BlockInteractionUtils.placeBlock` + `InventoryUtils.swapTo/swapBack`，
+  旋转走 `ClientContext.rotationManager.requestRotation`，发包走 `PacketSender`。
+- 重映射脚本的坑：tiny v2 的成员行是 `\t<f|m>\t<描述符(源命名空间)>\t<源命名>\t<目标命名>`，列序写反时
+  tiny-remapper 只会改类名和描述符，成员名原样保留——编译和加载都不会报错，运行时才炸。
+- 本插件不含任何 mixin 配置。
+
+## 许可
+
+原插件 `meteor-miku` 版权归 mikumiku 所有；Evernight 本体为 GPL-3.0-only。本移植工程仅链接本体公开 API，
+按 GPL-3.0 处理。

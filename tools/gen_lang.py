@@ -1,0 +1,187 @@
+#!/usr/bin/env python3
+"""Generates assets/mikumiku/lang/{en_us,zh_cn}.json from the module sources.
+
+Every module contributes three key groups:
+  * addons.mikumiku.names.modules.<Name>          - ClickGUI display name
+  * addons.mikumiku.descriptions.modules.<Name>   - module tooltip
+  * addons.mikumiku.names.settings.<Setting>      - setting label
+
+The ClickGUI tooltip for a *setting* is resolved by the client through
+``Translations.settingDescription(moduleConfigName, settingConfigName)``, which hardcodes the
+``evernight.descriptions.settings.<Module>.<Setting>`` namespace. There is no addon-aware overload in
+Evernight 1.0.3, so this generator also emits those keys (scoped by our unique module names) to keep
+the tooltip readable instead of showing a raw key.
+"""
+import glob
+import json
+import os
+import re
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODULES = os.path.join(ROOT, "src/main/java/com/github/mikumiku/evernight/modules")
+SEED = os.path.join(ROOT, "tools/lang_seed.json")
+
+with open(SEED, encoding="utf-8") as handle:
+    seed = json.load(handle)
+
+CATEGORY_NAMES = seed["CATEGORY_NAMES"]
+MODULE_NAMES = seed["MODULE_NAMES"]
+DESCRIPTIONS_ZH = seed["DESCRIPTIONS_ZH"]
+SETTING_NAMES = seed["SETTING_NAMES"]
+
+# English descriptions for modules whose Java constructor does not carry one (HUD widgets pass an
+# alias as the second argument).
+DESCRIPTIONS_EN = {
+    "PotCountHud": "Shows the splash potion count and remaining resistance time.",
+    "MikuInfoHud": "Shows coordinates, speed, ping and dimension.",
+}
+
+# One line per setting, used for the ClickGUI setting tooltip.
+SETTING_DESCRIPTIONS = {
+    "Accelerate": ("Gain extra falling speed while descending.", "下落时额外加速。"),
+    "AntiKick": ("Prevents the server from kicking you for falling too fast.", "防止因下落过快被服务器踢出。"),
+    "AutoFirework": ("Use firework rockets while gliding.", "滑翔时自动使用烟花火箭。"),
+    "AutoJump": ("Jump automatically when the target is out of reach.", "目标超出攻击范围时自动起跳。"),
+    "AutoStart": ("Start gliding automatically when falling.", "下落时自动开启鞘翅滑翔。"),
+    "AutoTool": ("Switch to the best tool for the block being mined.", "自动切换到挖掘该方块的最佳工具。"),
+    "Blocks": ("Block names this module targets.", "此模块处理的方块名称列表。"),
+    "BlocksPerTick": ("Maximum blocks placed per tick.", "每 tick 最多放置的方块数量。"),
+    "Bonemeal": ("Use bone meal to grow the sapling.", "使用骨粉催熟树苗。"),
+    "Break": ("Break end crystals automatically.", "自动破坏末影水晶。"),
+    "BreakDelay": ("Minimum delay between crystal breaks (ms).", "两次破坏水晶之间的最小间隔（毫秒）。"),
+    "BreakRange": ("Maximum distance for breaking crystals.", "破坏水晶的最大距离。"),
+    "CPS": ("Attacks per second.", "每秒攻击次数。"),
+    "Center": ("Center the player on the block before placing.", "放置前把玩家对齐到方块中心。"),
+    "Charge": ("Charge the anchor with glowstone before detonating.", "引爆前用萤石为重生锚充能。"),
+    "CloseAfterOpen": ("Close the container right after opening it.", "打开容器后立即关闭。"),
+    "Cobblestone": ("Allow cobblestone as a blocking block.", "允许使用圆石作为填充方块。"),
+    "Command": ("Chat command to send.", "要发送的聊天指令。"),
+    "Cooldown": ("Minimum delay between two actions (ms).", "两次动作之间的最小间隔（毫秒）。"),
+    "CryingObsidian": ("Allow crying obsidian as a fill block.", "允许使用哭泣的黑曜石作为填充方块。"),
+    "Delay": ("Delay between actions (ms).", "动作之间的延迟（毫秒）。"),
+    "DisableAfterThrow": ("Disable the module after throwing.", "丢出后自动关闭模块。"),
+    "DisableAfterTrigger": ("Disable the module after it triggers.", "触发后自动关闭模块。"),
+    "DisableAfterUse": ("Disable the module after one use.", "使用一次后自动关闭模块。"),
+    "DisableOnFly": ("Skip while the player is allowed to fly.", "允许飞行时不生效。"),
+    "DisableWhenFull": ("Disable when experience is full.", "经验已满时自动关闭。"),
+    "DisableWhenSafe": ("Disable once you are already in a hole.", "已经处于坑内时自动关闭。"),
+    "Distance": ("Follow distance kept to the target.", "与目标保持的跟随距离。"),
+    "EnderChest": ("Allow ender chests as a fill block.", "允许使用末影箱作为填充方块。"),
+    "ExcludeHotbar": ("Never drop items from the hotbar.", "不丢弃快捷栏中的物品。"),
+    "Explosions": ("Also handle explosion knockback.", "同时处理爆炸击退。"),
+    "FallSpeed": ("Vertical speed kept while hovering.", "悬停时保持的垂直速度。"),
+    "FireworkInterval": ("Delay between firework boosts (ms).", "两次烟花加速之间的间隔（毫秒）。"),
+    "GoldenApple": ("Use golden apples when health is low.", "低血量时使用金苹果。"),
+    "Head": ("Also cover the head level.", "同时封闭头部位置。"),
+    "Health": ("Health threshold that triggers this module.", "触发此模块的生命值阈值。"),
+    "Height": ("Maximum height scanned or fallen.", "扫描或下落的最大高度。"),
+    "HoleRange": ("Search radius for holes.", "搜索坑洞的半径。"),
+    "Horizontal": ("Horizontal knockback scale (0-1).", "水平击退比例（0-1）。"),
+    "IgnoreBedrock": ("Skip bedrock while mining.", "挖掘时忽略基岩。"),
+    "Interval": ("Interval between messages or actions.", "消息或动作的间隔。"),
+    "Items": ("Item names handled by this module.", "此模块处理的物品名称。"),
+    "KeepY": ("Stay at the starting Y level.", "保持在起始高度。"),
+    "KillMessage": ("Message sent after a kill.", "击杀后发送的消息。"),
+    "MaxSelfDamage": ("Maximum damage you are willing to take.", "允许自己承受的最大伤害。"),
+    "MinDamage": ("Minimum damage dealt to the target.", "对目标造成的最小伤害。"),
+    "MinFallDistance": ("Minimum fall distance before triggering.", "触发前的最小下落距离。"),
+    "Mode": ("Operating mode of this module.", "模块的工作模式。"),
+    "MoveCorrection": ("Reduce knockback while moving to bypass Grim.", "移动时削减击退以绕过 Grim。"),
+    "MoveStop": ("Pause while movement keys are held.", "按住移动键时暂停。"),
+    "Netherite": ("Allow netherite blocks as a fill block.", "允许使用下界合金块作为填充方块。"),
+    "Obsidian": ("Allow obsidian as a fill block.", "允许使用黑曜石作为填充方块。"),
+    "OnlyExposed": ("Only target blocks exposed to air.", "只处理暴露在空气中的方块。"),
+    "OnlyFeet": ("Only place blocks at your feet.", "只在脚边放置方块。"),
+    "OnlyFullDurability": ("Only use items with full durability.", "仅在耐久满时使用。"),
+    "OnlyGround": ("Only work while standing on the ground.", "仅在地面时生效。"),
+    "OnlyOnGround": ("Only work while standing on the ground.", "仅在地面时生效。"),
+    "OnlyOnce": ("Trigger only once per session.", "每次会话只触发一次。"),
+    "OnlyPlayers": ("Only attack players.", "只攻击玩家。"),
+    "OnlySource": ("Only fill actual source blocks.", "只填充真正的源方块。"),
+    "OnlyWhenFalling": ("Only attack while falling.", "仅在下落时攻击。"),
+    "OnlyWhenJumping": ("Only hover while the jump key is held.", "仅按住跳跃键时悬停。"),
+    "OnlyWhenMoving": ("Only work while moving.", "仅在移动时生效。"),
+    "OnlyWhenPlayersNearby": ("Only send messages when other players are around.", "仅在其他玩家附近时发送。"),
+    "OnlyWhenRaining": ("Only use the trident while it rains.", "仅在下雨时使用三叉戟。"),
+    "OnlyWhenSneaking": ("Only work while sneaking.", "仅在潜行时生效。"),
+    "OnlyWhenStanding": ("Only mount while standing still.", "仅在静止时上车。"),
+    "PerTick": ("Items used per tick.", "每 tick 使用的物品数量。"),
+    "Place": ("Place blocks or crystals automatically.", "自动放置方块或水晶。"),
+    "PlaceDelay": ("Delay between placements (ms).", "两次放置之间的延迟（毫秒）。"),
+    "PlaceRange": ("Maximum placement distance.", "放置的最大距离。"),
+    "Player": ("Name of the player to watch.", "要监视的玩家名称。"),
+    "PlayersOnly": ("Only trigger for nearby players.", "仅在有玩家时触发。"),
+    "Potion": ("Use potions when health is low.", "低血量时使用药水。"),
+    "Predict": ("Predict target movement before placing.", "放置前预测目标移动。"),
+    "Range": ("Working range of this module.", "模块的作用范围。"),
+    "RestoreOnDisable": ("Restore vanilla behaviour when disabled.", "关闭时恢复原版行为。"),
+    "Rotate": ("Rotate towards the target before acting.", "操作前转向目标。"),
+    "SafeDistance": ("Fall distance treated as safe.", "视为安全的下落距离。"),
+    "ShowCoords": ("Show your coordinates.", "显示坐标。"),
+    "ShowDimension": ("Show the current dimension.", "显示当前维度。"),
+    "ShowPing": ("Show your latency.", "显示延迟。"),
+    "ShowResistanceTime": ("Show remaining resistance time.", "显示抗性剩余时间。"),
+    "ShowSpeed": ("Show your horizontal speed.", "显示水平速度。"),
+    "ShowSplashPotCount": ("Show the number of splash potions.", "显示溅射药水数量。"),
+    "Speed": ("Movement or action speed.", "移动或动作速度。"),
+    "SpoofLegit": ("Spoof small movement to look natural.", "伪装轻微移动使动作自然。"),
+    "Sprint": ("Sprint while following.", "跟随时疾跑。"),
+    "StopHorizontal": ("Cancel horizontal movement while hovering.", "悬停时取消水平移动。"),
+    "StopMoving": ("Do nothing while movement keys are held.", "按住移动键时不生效。"),
+    "StopWhenNoInput": ("Stop gliding control without input.", "无输入时停止控制。"),
+    "Swing": ("Swing the hand when attacking.", "攻击时挥手。"),
+    "TargetRange": ("Maximum distance to the target.", "目标的最大距离。"),
+    "Threshold": ("Durability threshold before swapping.", "切换前的耐久阈值。"),
+    "Top": ("Also cover the block above the head.", "同时封闭头顶方块。"),
+    "TotemMessage": ("Message sent after the target pops a totem.", "目标爆图腾后发送的消息。"),
+    "Tower": ("Place blocks upward while jumping.", "跳跃时向上搭塔。"),
+    "Vertical": ("Vertical knockback scale (0-1).", "垂直击退比例（0-1）。"),
+    "VerticalSpeed": ("Vertical speed while flying.", "飞行时的垂直速度。"),
+}
+
+
+def main():
+    en = {}
+    zh = {}
+    for category, (english, chinese) in CATEGORY_NAMES.items():
+        en["addons.mikumiku.names.categories." + category] = english
+        zh["addons.mikumiku.names.categories." + category] = chinese
+
+    for path in sorted(glob.glob(os.path.join(MODULES, "**", "*.java"), recursive=True)):
+        text = open(path, encoding="utf-8").read()
+        match = re.search(r'super\("([A-Za-z0-9]+)",\s*"((?:[^"\\]|\\.)*)"', text)
+        if not match:
+            continue
+        name, description = match.group(1), match.group(2)
+        english, chinese = MODULE_NAMES.get(name, (name, name))
+        en["addons.mikumiku.names.modules." + name] = english
+        zh["addons.mikumiku.names.modules." + name] = chinese
+        en["addons.mikumiku.descriptions.modules." + name] = DESCRIPTIONS_EN.get(name, description)
+        zh["addons.mikumiku.descriptions.modules." + name] = DESCRIPTIONS_ZH.get(name, description)
+
+        settings = set()
+        settings.update(re.findall(r'new [A-Za-z]*Setting(?:<[^>]*>)?\("([A-Za-z0-9]+)"', text))
+        settings.update(re.findall(r'new StringSetting\("([A-Za-z0-9]+)"', text))
+        settings.update(re.findall(r'new StringSetSetting\("([A-Za-z0-9]+)"', text))
+        for setting in sorted(settings):
+            en["addons.mikumiku.names.settings." + setting] = setting
+            zh["addons.mikumiku.names.settings." + setting] = SETTING_NAMES.get(setting, setting)
+            english_description, chinese_description = SETTING_DESCRIPTIONS.get(
+                setting, ("", SETTING_NAMES.get(setting, setting)))
+            key = "evernight.descriptions.settings." + name + "." + setting
+            en[key] = english_description
+            zh[key] = chinese_description
+
+    lang_dir = os.path.join(ROOT, "src/main/resources/assets/mikumiku/lang")
+    os.makedirs(lang_dir, exist_ok=True)
+    with open(os.path.join(lang_dir, "en_us.json"), "w", encoding="utf-8") as handle:
+        json.dump(dict(sorted(en.items())), handle, ensure_ascii=False, indent=2)
+        handle.write("\n")
+    with open(os.path.join(lang_dir, "zh_cn.json"), "w", encoding="utf-8") as handle:
+        json.dump(dict(sorted(zh.items())), handle, ensure_ascii=False, indent=2)
+        handle.write("\n")
+    print("modules=%d keys=%d" % (len(MODULE_NAMES), len(en)))
+
+
+if __name__ == "__main__":
+    main()

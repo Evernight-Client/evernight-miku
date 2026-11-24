@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "mikumiku",
+  "version": "${version}",
+  "name": "Miku Addon",
+  "description": "Meteor Miku addon ported to Evernight: combat, movement, player, build and HUD utilities.",
+  "authors": [
+    "mikumiku",
+    "Evernight port"
+  ],
+  "contact": {
+    "sources": "https://github.com/Evernight-Client/Evernight"
+  },
+  "environment": "client",
+  "entrypoints": {
+    "evernight-addon": [
+      "com.github.mikumiku.evernight.MikuAddon"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "1.21.11",
+    "java": ">=21",
+    "fabric-api": "*",
+    "evernight": ">=1.0.3"
+  }
+}

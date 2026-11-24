@@ -1,0 +1,362 @@
+{
+  "CATEGORY_NAMES": {
+    "MikuBuild": [
+      "Miku Build",
+      "Miku 建设"
+    ],
+    "MikuTweak": [
+      "Miku Tweak",
+      "Miku 特调"
+    ],
+    "Miku": [
+      "Miku",
+      "Miku"
+    ]
+  },
+  "MODULE_NAMES": {
+    "VelocityPlus": [
+      "Velocity+",
+      "反击退+"
+    ],
+    "AntiKnockbackPlus": [
+      "AntiKnockback+",
+      "反击退++"
+    ],
+    "NoFallPlus": [
+      "NoFall+",
+      "Grim无摔伤"
+    ],
+    "FastFallPlus": [
+      "FastFall+",
+      "快速下落"
+    ],
+    "SurroundPlus": [
+      "Surround+",
+      "围脚+"
+    ],
+    "HoleSnapPlus": [
+      "HoleSnap+",
+      "进基岩坑"
+    ],
+    "AutoHoleFillPlus": [
+      "AutoHoleFill+",
+      "自动填坑"
+    ],
+    "AutoLogPlus": [
+      "AutoLog+",
+      "智能Log"
+    ],
+    "AutoEzPlus": [
+      "AutoEz+",
+      "自动EZ"
+    ],
+    "AutoTrashPlus": [
+      "AutoTrash+",
+      "自动扔垃圾"
+    ],
+    "AutoXPPlus": [
+      "AutoXP+",
+      "XP自动丢"
+    ],
+    "AutoChorusFruitPlus": [
+      "AutoChorusFruit+",
+      "紫颂果降落"
+    ],
+    "DeathCommand": [
+      "DeathCommand",
+      "死亡自动指令"
+    ],
+    "AutoLoginPlus": [
+      "AutoLogin+",
+      "自动登录Plus"
+    ],
+    "CriticalsPlus": [
+      "Criticals+",
+      "刀暴击+"
+    ],
+    "ScaffoldPlus": [
+      "Scaffold+",
+      "自动搭路"
+    ],
+    "NukerPlus": [
+      "Nuker+",
+      "自动挖周围"
+    ],
+    "AutoMinerPlus": [
+      "AutoMiner+",
+      "挖沙挖一切"
+    ],
+    "LiquidFillerPlus": [
+      "LiquidFiller+",
+      "自动填水填海"
+    ],
+    "AutoCrystalPlus": [
+      "AutoCrystal+",
+      "Miku水晶"
+    ],
+    "AnchorAuraPlus": [
+      "AnchorAura+",
+      "锚爆光环+"
+    ],
+    "SelfTrapPlus": [
+      "SelfTrap+",
+      "包裹自己"
+    ],
+    "AutoSlabPlus": [
+      "AutoSlab+",
+      "铺半砖+"
+    ],
+    "ChestAuraPlus": [
+      "ChestAura+",
+      "翻箱倒柜"
+    ],
+    "OneKeyPearl": [
+      "OneKeyPearl",
+      "一键珍珠"
+    ],
+    "PlayerAlertPlus": [
+      "PlayerAlert+",
+      "看门狗"
+    ],
+    "HoverPlus": [
+      "Hover+",
+      "悬停"
+    ],
+    "AutoMinecartPlus": [
+      "AutoMinecart+",
+      "自动上矿车"
+    ],
+    "HandsomeSpin": [
+      "HandsomeSpin",
+      "靓仔转圈"
+    ],
+    "InventoryPrinter": [
+      "InventoryPrinter",
+      "库存打印"
+    ],
+    "AutoTouchFire": [
+      "AutoTouchFire",
+      "自动消防"
+    ],
+    "FishingRodFace": [
+      "FishingRodFace",
+      "鱼竿糊脸"
+    ],
+    "ElytraFlyPlus": [
+      "ElytraFly+",
+      "鞘翅平飞"
+    ],
+    "MaceComboPlus": [
+      "MaceCombo+",
+      "切锤增伤"
+    ],
+    "PotCountHud": [
+      "PotCountHud",
+      "药水计数"
+    ],
+    "MikuInfoHud": [
+      "MikuInfoHud",
+      "Miku信息"
+    ],
+    "KillAuraPlus": [
+      "KillAura+",
+      "杀戮光环"
+    ],
+    "PhasePlus": [
+      "Phase+",
+      "相位穿墙"
+    ],
+    "TridentFlyPlus": [
+      "TridentFly+",
+      "三叉戟飞行"
+    ],
+    "AutoFollowPlayer": [
+      "AutoFollowPlayer",
+      "跟随玩家"
+    ],
+    "AutoBlockCenter": [
+      "AutoBlockCenter",
+      "自动居中"
+    ],
+    "TreeAuraPlus": [
+      "TreeAura+",
+      "自动种树"
+    ],
+    "AutoDigFeet": [
+      "AutoDigFeet",
+      "脚下挖掘"
+    ],
+    "AutoUseItems": [
+      "AutoUseItems",
+      "自动用物品"
+    ],
+    "AutoSM": [
+      "AutoSM",
+      "自动社交"
+    ],
+    "AutoCrystalBlock": [
+      "AutoCrystalBlock",
+      "自动挡水晶"
+    ],
+    "ElytraArmorSwitch": [
+      "ElytraArmorSwitch",
+      "自动鞘翅切换"
+    ],
+    "ElytraUnbreak": [
+      "ElytraUnbreak",
+      "无限耐久鞘翅"
+    ]
+  },
+  "DESCRIPTIONS_ZH": {
+    "VelocityPlus": "被攻击或爆炸时减少或抵抗击退效果（兼容 GrimAC）",
+    "AntiKnockbackPlus": "减少或取消击退效果",
+    "NoFallPlus": "防止摔落伤害，支持多种绕过模式",
+    "FastFallPlus": "更快地下降",
+    "SurroundPlus": "使用方块快速包裹自己的脚部，减少水晶爆炸伤害",
+    "HoleSnapPlus": "自动进入附近的安全基岩坑",
+    "AutoHoleFillPlus": "自动填充敌人周围的基岩坑",
+    "AutoLogPlus": "满足条件时自动断开连接",
+    "AutoEzPlus": "敌人死亡后发送嘲讽消息",
+    "AutoTrashPlus": "自动丢弃背包中的垃圾物品",
+    "AutoXPPlus": "自动丢经验瓶修装备",
+    "AutoChorusFruitPlus": "在空中自动吃紫颂果直到落地",
+    "DeathCommand": "死亡后自动发送自定义聊天指令",
+    "AutoLoginPlus": "检测当前 MC 用户名并自动匹配对应密码登录服务器",
+    "CriticalsPlus": "让每次攻击都打出暴击伤害",
+    "ScaffoldPlus": "自动在你脚下放置方块搭路",
+    "NukerPlus": "自动挖掘周围方块",
+    "AutoMinerPlus": "自动挖掘指定方块，支持工具更换",
+    "LiquidFillerPlus": "自动将方块放置在范围内的水源方块内",
+    "AutoCrystalPlus": "自动放置和破坏末影水晶",
+    "AnchorAuraPlus": "使用重生锚自动消灭敌人",
+    "SelfTrapPlus": "用方块困住自己",
+    "AutoSlabPlus": "自动放置半砖防刷怪",
+    "ChestAuraPlus": "自动打开附近的箱子",
+    "OneKeyPearl": "一键丢出末影珍珠",
+    "PlayerAlertPlus": "有玩家进入附近时提醒",
+    "HoverPlus": "允许玩家在空中保持位置不变",
+    "AutoMinecartPlus": "矿车到达附近自动上车",
+    "HandsomeSpin": "惊呆所有人的炫酷旋转效果",
+    "InventoryPrinter": "打印库存槽位信息到聊天栏",
+    "AutoTouchFire": "自动扑灭你周围的火",
+    "FishingRodFace": "使用鱼竿丢敌人脸上",
+    "ElytraFlyPlus": "更多控制鞘翅的方法",
+    "MaceComboPlus": "使用武器锤连击",
+    "PotCountHud": "在屏幕上显示溅射药水数量与抗性剩余时间",
+    "MikuInfoHud": "显示坐标、速度、延迟与维度",
+    "KillAuraPlus": "自动攻击附近实体",
+    "PhasePlus": "可以穿过方块行走",
+    "TridentFlyPlus": "使用三叉戟飞行",
+    "AutoFollowPlayer": "自动跟随指定玩家",
+    "AutoBlockCenter": "自动站到方块中心",
+    "TreeAuraPlus": "在你周围种树",
+    "AutoDigFeet": "自动挖掘脚前的方块",
+    "AutoUseItems": "低血量时自动使用治疗物品",
+    "AutoSM": "定时发送社交消息",
+    "AutoCrystalBlock": "检测到附近末地水晶时自动放置方块抵挡",
+    "ElytraArmorSwitch": "在地面时自动穿盔甲，在空中使用鞘翅",
+    "ElytraUnbreak": "通过自动切换鞘翅来防止耐久消耗，并可选自动使用烟花"
+  },
+  "SETTING_NAMES": {
+    "Horizontal": "水平击退比例",
+    "Vertical": "垂直击退比例",
+    "Explosions": "爆炸影响",
+    "MoveStop": "防卡脚",
+    "OnlyGround": "仅在地面生效",
+    "SpoofLegit": "伪装自然动作",
+    "Mode": "模式",
+    "Delay": "延迟",
+    "MoveCorrection": "移动修正",
+    "SafeDistance": "安全距离修正",
+    "DisableOnFly": "飞行时禁用",
+    "Height": "高度",
+    "Accelerate": "加速",
+    "AntiKick": "防踢",
+    "MinFallDistance": "最小下落距离",
+    "Obsidian": "黑曜石",
+    "CryingObsidian": "哭泣的黑曜石",
+    "EnderChest": "末影箱",
+    "Netherite": "下界合金块",
+    "Head": "头部",
+    "Range": "范围",
+    "Rotate": "旋转",
+    "Center": "居中",
+    "HoleRange": "洞穴范围",
+    "Cooldown": "冷却",
+    "DisableWhenSafe": "安全时关闭",
+    "BlocksPerTick": "每次放置数量",
+    "Health": "生命值阈值",
+    "PlayersOnly": "仅玩家",
+    "DisableAfterTrigger": "触发后关闭",
+    "KillMessage": "击杀消息",
+    "TotemMessage": "图腾消息",
+    "ExcludeHotbar": "排除快捷栏",
+    "Items": "物品列表",
+    "PerTick": "每次丢瓶数量",
+    "OnlyFullDurability": "仅满耐久时",
+    "DisableWhenFull": "满经验时关闭",
+    "DisableAfterUse": "使用后关闭",
+    "Command": "指令",
+    "OnlyOnce": "仅一次",
+    "Tower": "搭塔",
+    "KeepY": "保持高度",
+    "OnlyExposed": "仅暴露方块",
+    "IgnoreBedrock": "忽略基岩",
+    "Blocks": "方块列表",
+    "AutoTool": "自动换工具",
+    "OnlySource": "仅水源",
+    "Place": "放置",
+    "Break": "破坏",
+    "PlaceRange": "放置范围",
+    "BreakRange": "破坏范围",
+    "TargetRange": "目标范围",
+    "MinDamage": "最小伤害",
+    "MaxSelfDamage": "最大自伤",
+    "PlaceDelay": "放置延迟",
+    "BreakDelay": "破坏延迟",
+    "Predict": "预测",
+    "Charge": "充能",
+    "Top": "顶部",
+    "CloseAfterOpen": "打开后关闭",
+    "Player": "玩家名",
+    "FallSpeed": "下落速度",
+    "OnlyWhenJumping": "仅跳跃时",
+    "StopHorizontal": "停止水平移动",
+    "Speed": "速度",
+    "AutoStart": "自动开始",
+    "StopWhenNoInput": "无输入时停止",
+    "VerticalSpeed": "垂直速度",
+    "AutoJump": "自动跳跃",
+    "OnlyWhenFalling": "仅下落时",
+    "OnlyWhenStanding": "仅站立时",
+    "CPS": "每秒攻击次数",
+    "Swing": "挥手",
+    "OnlySneaking": "仅潜行时",
+    "RestoreOnDisable": "关闭时恢复",
+    "OnlyWhenRaining": "仅下雨时",
+    "Distance": "距离",
+    "Sprint": "疾跑",
+    "OnlyWhenMoving": "仅移动时",
+    "GoldenApple": "金苹果",
+    "Potion": "药水",
+    "Interval": "间隔",
+    "OnlyWhenPlayersNearby": "仅附近有玩家时",
+    "Bonemeal": "骨粉催熟",
+    "OnlyFeet": "仅脚边放置",
+    "Cobblestone": "圆石",
+    "Threshold": "耐久阈值",
+    "AutoFirework": "自动发射烟花",
+    "FireworkInterval": "烟花发射间隔",
+    "ShowSplashPotCount": "显示溅射药水数量",
+    "ShowResistanceTime": "显示抗性时间",
+    "ShowCoords": "显示坐标",
+    "ShowSpeed": "显示速度",
+    "ShowPing": "显示延迟",
+    "ShowDimension": "显示维度",
+    "DisableAfterThrow": "丢出后关闭",
+    "OnlyOnGround": "仅在地面生效",
+    "OnlyPlayers": "仅玩家",
+    "OnlyWhenSneaking": "仅潜行时生效",
+    "StopMoving": "移动时暂停"
+  }
+}

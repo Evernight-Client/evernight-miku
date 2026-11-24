@@ -1,0 +1,61 @@
+plugins {
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.fabricmc.net/' }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+
+    // Evernight 本体发行 jar（intermediary），Loom 会重映射成开发用 named 命名空间
+    modImplementation files("libs/evernight-${evernight_version}.jar")
+
+    compileOnly 'org.jetbrains:annotations:26.0.2'
+}
+
+loom {
+    runs {
+        client {
+            client()
+            name = 'Evernight Miku Client'
+            runDir = 'run'
+            ideConfigGenerated = true
+        }
+    }
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand version: project.version }
+}
+
+java {
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-proc:none']
+    options.fork = true
+    options.forkOptions.memoryMaximumSize = '4g'
+}
+
+tasks.named('remapJar') {
+    def serviceOptions = tinyRemapperServiceOptions.get()
+    serviceOptions.classpath.setFrom(sourceSets.main.compileClasspath)
+    tinyRemapperServiceOptions.set(serviceOptions)
+}
