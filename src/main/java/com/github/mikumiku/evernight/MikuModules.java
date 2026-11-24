@@ -16,6 +16,7 @@ import com.github.mikumiku.evernight.modules.HandsomeSpinModule;
 import com.github.mikumiku.evernight.modules.HoverModule;
 import com.github.mikumiku.evernight.modules.InventoryPrinterModule;
 import com.github.mikumiku.evernight.modules.PlayerAlertModule;
+import com.github.mikumiku.evernight.modules.PrinterModule;
 import com.github.mikumiku.evernight.modules.TreeAuraModule;
 import com.github.mikumiku.evernight.modules.hud.PotCountHudModule;
 import evernight.addon.AddonContext;
@@ -54,6 +55,7 @@ public final class MikuModules {
         FACTORIES.add(TreeAuraModule::new);
         FACTORIES.add(AutoDigFeetModule::new);
         FACTORIES.add(AutoTouchFireModule::new);
+        FACTORIES.add(PrinterModule::new);
         // Miku 特调
         FACTORIES.add(HoverModule::new);
         FACTORIES.add(ElytraArmorSwitchModule::new);

@@ -15,6 +15,7 @@ public class CtorTest {
             "TreeAuraModule",
             "AutoDigFeetModule",
             "AutoTouchFireModule",
+            "PrinterModule",
             "HoverModule",
             "ElytraArmorSwitchModule",
             "ElytraUnbreakModule",

@@ -205,6 +205,10 @@
     "ElytraUnbreak": [
       "ElytraUnbreak",
       "无限耐久鞘翅"
+    ],
+    "Printer": [
+      "Printer",
+      "投影打印机"
     ]
   },
   "DESCRIPTIONS_ZH": {
@@ -255,7 +259,8 @@
     "AutoSM": "定时发送社交消息",
     "AutoCrystalBlock": "检测到附近末地水晶时自动放置方块抵挡",
     "ElytraArmorSwitch": "在地面时自动穿盔甲，在空中使用鞘翅",
-    "ElytraUnbreak": "通过自动切换鞘翅来防止耐久消耗，并可选自动使用烟花"
+    "ElytraUnbreak": "通过自动切换鞘翅来防止耐久消耗，并可选自动使用烟花",
+    "Printer": "读取 .litematic 投影文件并在你身边重建，无需安装 Litematica"
   },
   "SETTING_NAMES": {
     "Horizontal": "水平击退比例",
@@ -357,6 +362,18 @@
     "OnlyOnGround": "仅在地面生效",
     "OnlyPlayers": "仅玩家",
     "OnlyWhenSneaking": "仅潜行时生效",
-    "StopMoving": "移动时暂停"
+    "StopMoving": "移动时暂停",
+    "File": "投影文件路径",
+    "Reload": "重新载入",
+    "Anchor": "锚点模式",
+    "OriginX": "原点 X",
+    "OriginY": "原点 Y",
+    "OriginZ": "原点 Z",
+    "Rotation": "旋转",
+    "MirrorX": "X 轴镜像",
+    "MirrorZ": "Z 轴镜像",
+    "DelayTicks": "放置间隔（tick）",
+    "DirtForGrass": "泥土代替草方块",
+    "Debug": "调试输出"
   }
 }

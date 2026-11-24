@@ -10,7 +10,7 @@
 
 - 目标环境：Minecraft 1.21.11 · Fabric · **Evernight 1.0.3+** · Java 21
 - 插件 id：`mikumiku`，入口 `evernight-addon`
-- 当前 **18 个模块**：建造、移动特调、实用工具与 HUD
+- 当前 **19 个模块**：建造、移动特调、实用工具与 HUD
 - 使用 1.0.3 的 `AddonContext.registerCategory` 注册 3 个专属分类：**Miku / Miku 建设 / Miku 特调**
 
 ## 安装
@@ -58,22 +58,22 @@ python tools/build.py  # javac -> tiny-remapper(named→intermediary) -> 打包
 # 1) 所有 Minecraft 成员引用都能在 intermediary 目标 jar 里解析
 javac -cp "<asm>;<asm-tree>" -d build/verify tools/verify/VerifyRemap.java
 java -cp "build/verify;<asm>;<asm-tree>" VerifyRemap build/libs/evernight-miku-1.1.0.jar <minecraft-merged-intermediary.jar>
-# 期望输出：checked=346 missing=0
+# 期望输出：checked=449 missing=0
 
 # 2) 所有 class 能在 MC + 本体 jar 上加载
 javac -d build/verify tools/verify/CheckJar.java
 java -cp build/verify CheckJar build/libs/evernight-miku-1.1.0.jar <mc.jar> <evernight.jar> <brigadier> <gson> <slf4j>
-# 期望输出：ok=25 fail=0
+# 期望输出：ok=29 fail=0
 
 # 3) 模块构造函数（需要真实依赖 classpath）
 javac @javac.args && java @java.args
-# 期望输出：ok=17 fail=0
+# 期望输出：ok=18 fail=0
 ```
 
 `VerifyRemap` 是必须的：`named2int.tiny` 的成员列顺序一旦写反，字段/方法名不会重映射，
 编译能过、类能加载，但进游戏第一次访问 MC 成员就会 `NoSuchMethodError`。
 
-## 模块（18）
+## 模块（19）
 
 ### Miku（8）
 
@@ -88,7 +88,7 @@ javac @javac.args && java @java.args
 | `InventoryPrinter` | 库存打印 | 把背包内容打到聊天栏 |
 | `ChestAuraPlus` | 翻箱倒柜 | 自动打开附近箱子（不拿东西） |
 
-### Miku 建设（4）
+### Miku 建设（5）
 
 | 模块 | 原模块 | 说明 |
 | --- | --- | --- |
@@ -96,6 +96,7 @@ javac @javac.args && java @java.args
 | `TreeAuraPlus` | 自动种树 | 在周围放树苗 |
 | `AutoDigFeet` | 脚下挖掘 | 挖掉挡路的脚前方块 |
 | `AutoTouchFire` | 自动消防 | 扑灭周围火焰 |
+| `Printer` | Miku投影打印机 | 读取 `.litematic` 投影并在你身边重建（不需要装 Litematica） |
 
 ### Miku 特调（5）
 
@@ -127,7 +128,7 @@ evernight-miku/
 │   ├── MikuHudModule.java    HUD 基类（HudWidgetModule + addons 命名空间）
 │   ├── MikuModules.java      注册表（一行一个模块）
 │   ├── MikuCommand.java      ;miku 指令
-│   ├── modules/              17 个模块
+│   ├── modules/              18 个模块
 │   └── util/MikuUtils.java   放置/旋转/搜索等公共工具
 ├── src/main/resources/
 │   ├── fabric.mod.json
@@ -139,6 +140,18 @@ evernight-miku/
     ├── named2int.tiny        named → intermediary
     └── verify/               VerifyRemap / CheckJar / BaritoneProbe / CtorTest
 ```
+
+## 投影打印机用法
+
+`Printer` 直接读 Litematica 的 `.litematic` 文件，**不需要安装 Litematica**：
+
+1. `File` 填 `.litematic` 的完整路径（例如 `D://schem//base.litematic`）
+2. `Anchor` 选 `Player`：以你脚下为原点；或选 `Fixed` 并在 `OriginX/Y/Z` 填绝对坐标
+3. 需要的话调整 `Rotation`（0/90/180/270）、`MirrorX` / `MirrorZ`
+4. 打开一次 `Reload` 重新载入，聊天栏会显示 `Loaded <名字>: <方块数> blocks`
+5. 站到范围内即可开始自动放置；`BlocksPerTick` 默认 2，`DelayTicks` 控制节奏
+
+限制：楼梯/半砖会按朝向与上下半砖做基础处理，活板门、火把等特殊朝向暂按默认放置；投影里的方块必须在背包里（草方块可用泥土替代，见 `DirtForGrass`）。
 
 ## 与 1.0.3 的适配
 
