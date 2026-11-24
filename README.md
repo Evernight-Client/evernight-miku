@@ -1,6 +1,12 @@
 # Miku Addon for Evernight
 
+[![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
+[![Minecraft](https://img.shields.io/badge/minecraft-1.21.11-green.svg)](https://www.minecraft.net/)
+[![Evernight](https://img.shields.io/badge/evernight-%E2%89%A51.0.3-purple.svg)](https://github.com/Evernight-Client/Evernight)
+
 把 Meteor Client 插件 **meteor-miku** 里 **Evernight 本体没有的功能**移植到 Evernight 的插件框架。
+
+仓库：<https://github.com/zhehua1814686727-bit/evernight-miku> · 变更记录：[CHANGELOG.md](CHANGELOG.md)
 
 - 目标环境：Minecraft 1.21.11 · Fabric · **Evernight 1.0.3+** · Java 21
 - 插件 id：`mikumiku`，入口 `evernight-addon`
@@ -10,8 +16,11 @@
 ## 安装
 
 1. 安装 Fabric Loader 0.19.5+、Fabric API、Evernight 1.0.3（1.21.11）。
-2. 把 `build/libs/evernight-miku-1.1.0.jar` 放进 `.minecraft/mods/`。
-3. 启动游戏，日志出现 `Loaded addon Miku Addon 1.1.0 (mikumiku)`；游戏内 `;addons` 可查看插件与模块数。
+2. 拿到插件 jar（二选一）：
+   - 从 [Releases](https://github.com/zhehua1814686727-bit/evernight-miku/releases) 下载 `evernight-miku-1.1.0.jar`
+   - 或按下面的「从源码构建」自己编译
+3. 把 jar 放进 `.minecraft/mods/`。
+4. 启动游戏，日志出现 `Loaded addon Miku Addon 1.1.0 (mikumiku)`；游戏内 `;addons` 可查看插件与模块数。
 
 模块出现在 ClickGUI 的 Miku / Miku 建设 / Miku 特调 分类下（排在原生分类之后），中文名来自
 `assets/mikumiku/lang/zh_cn.json`（英文客户端显示英文名）。
