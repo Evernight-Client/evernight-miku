@@ -22,7 +22,17 @@ OUT = os.path.join(ROOT, "build")
 CLASSES = os.path.join(OUT, "classes")
 REMAP = os.path.join(OUT, "remapped")
 LIBS = os.path.join(ROOT, "libs")
-VERSION = "1.1.0"
+def read_version():
+    """Single source of truth for the addon version: gradle.properties."""
+    path = os.path.join(ROOT, "gradle.properties")
+    if os.path.isfile(path):
+        for line in open(path, encoding="utf-8"):
+            if line.startswith("mod_version="):
+                return line.split("=", 1)[1].strip()
+    raise SystemExit("mod_version is missing from gradle.properties")
+
+
+VERSION = read_version()
 
 
 def first(pattern):

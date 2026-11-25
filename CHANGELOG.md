@@ -1,5 +1,42 @@
 # Changelog
 
+## 1.4.0 — 2026-11-25
+
+### 新增
+
+- `ThreeCCheck`（3C萌新识别）：调用 3c3u.info 公开接口查玩家总在线时长，低于阈值判定为萌新；
+  支持手动查询、范围内自动查询（默认 200 米）、结果缓存与 2 秒请求间隔
+
+## 1.3.0 — 2026-11-25
+
+从 Meteor 插件 [Tanghulu](https://github.com/Tanghulu2019-a/Tanghulu) 移植了本体没有的两个功能。
+
+### 新增
+
+- `AutoTreeChop`（自动砍树）：扫描周围整棵树，默认从最高处往下砍，可自动换斧、砍完等待掉落物
+- `VanityESP`（珍品ESP）：高亮放着地图的物品展示框与附近的旗帜，用本体 `FeatureBoxRenderer` 绘制
+- 版本号提升到 1.3.0（`gradle.properties`）
+
+### 说明
+
+Tanghulu 里其余模块与本体或本插件重复（AutoLog / AutoMiner / AutoSlab / AutoTrash / AutoXP /
+Nuker / Scaffold / KillAura / ElytraFly 系 / PlayerAlert / InventoryPrinter / NoJumpDelay 等），
+或依赖本插件无法提供的运行时（seedfinding 库、Meteor 的 Notebot / Waypoints / ElytraFly 内部、
+mixin 注入），因此没有移植。
+
+## 1.2.0 — 2026-11-25
+
+### 新增
+
+- `Printer`（投影打印机）：直接读取 Litematica 的 `.litematic` 文件并在身边重建，无需安装 Litematica。
+  支持玩家/固定锚点、旋转、镜像、每 tick 放置上限，以及楼梯/半砖的基础朝向处理
+- 版本号改为单一来源：`tools/build.py` 从 `gradle.properties` 读取 `mod_version`
+
+### 修复
+
+- `tools/prepare.py` 生成的 `named2int.tiny` 描述符仍是 official 命名空间，导致干净克隆构建出的 jar
+  运行时 `NoSuchMethodError`；现在改用 official→named 表转换，并加了生成后校验
+
 ## 1.1.0 — 2026-11-24
 
 适配 Evernight 1.0.3。
@@ -7,14 +44,13 @@
 ### 新增
 
 - 3 个插件分类：`Miku` / `Miku 建设` / `Miku 特调`（`AddonContext.registerCategory`）
-- `Printer`：读取 `.litematic` 投影并在身边重建，无需 Litematica
 - `PotCountHud`：溅射药水数量 + 抗性剩余时间
 - 设置项 tooltip 的中英描述，修复显示原始语言键的问题
 
 ### 变更
 
 - 依赖升级到 `evernight-1.0.3.jar`（`depends.evernight >= 1.0.3`）
-- 模块集合：19 个，覆盖建造、移动特调、实用工具与 HUD
+- 模块集合：18 个，覆盖建造、移动特调、实用工具与 HUD
 - 源码树不再提交第三方 jar 与映射表，改由 `tools/prepare.py` 生成
 
 ### 修复

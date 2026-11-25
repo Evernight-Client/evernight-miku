@@ -7,6 +7,8 @@ import com.github.mikumiku.evernight.modules.AutoLoginModule;
 import com.github.mikumiku.evernight.modules.AutoSMModule;
 import com.github.mikumiku.evernight.modules.AutoSlabModule;
 import com.github.mikumiku.evernight.modules.AutoTouchFireModule;
+import com.github.mikumiku.evernight.modules.AutoTreeChopModule;
+import com.github.mikumiku.evernight.modules.AutoTreeChopModule;
 import com.github.mikumiku.evernight.modules.ChestAuraModule;
 import com.github.mikumiku.evernight.modules.DeathCommandModule;
 import com.github.mikumiku.evernight.modules.ElytraArmorSwitchModule;
@@ -17,7 +19,11 @@ import com.github.mikumiku.evernight.modules.HoverModule;
 import com.github.mikumiku.evernight.modules.InventoryPrinterModule;
 import com.github.mikumiku.evernight.modules.PlayerAlertModule;
 import com.github.mikumiku.evernight.modules.PrinterModule;
+import com.github.mikumiku.evernight.modules.ThreeCCheckModule;
+import com.github.mikumiku.evernight.modules.ThreeCCheckModule;
 import com.github.mikumiku.evernight.modules.TreeAuraModule;
+import com.github.mikumiku.evernight.modules.VanityEspModule;
+import com.github.mikumiku.evernight.modules.VanityEspModule;
 import com.github.mikumiku.evernight.modules.hud.PotCountHudModule;
 import evernight.addon.AddonContext;
 import evernight.client.modules.Module;
@@ -56,12 +62,15 @@ public final class MikuModules {
         FACTORIES.add(AutoDigFeetModule::new);
         FACTORIES.add(AutoTouchFireModule::new);
         FACTORIES.add(PrinterModule::new);
+        FACTORIES.add(AutoTreeChopModule::new);
         // Miku 特调
         FACTORIES.add(HoverModule::new);
         FACTORIES.add(ElytraArmorSwitchModule::new);
         FACTORIES.add(ElytraUnbreakModule::new);
         FACTORIES.add(AutoFollowPlayerModule::new);
         FACTORIES.add(AutoBlockCenterModule::new);
+        FACTORIES.add(VanityEspModule::new);
+        FACTORIES.add(ThreeCCheckModule::new);
         // HUD
         FACTORIES.add(PotCountHudModule::new);
     }

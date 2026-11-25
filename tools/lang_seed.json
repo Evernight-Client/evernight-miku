@@ -209,6 +209,18 @@
     "Printer": [
       "Printer",
       "投影打印机"
+    ],
+    "AutoTreeChop": [
+      "AutoTreeChop",
+      "自动砍树"
+    ],
+    "VanityESP": [
+      "VanityESP",
+      "珍品ESP"
+    ],
+    "ThreeCCheck": [
+      "ThreeCCheck",
+      "3C萌新识别"
     ]
   },
   "DESCRIPTIONS_ZH": {
@@ -260,7 +272,10 @@
     "AutoCrystalBlock": "检测到附近末地水晶时自动放置方块抵挡",
     "ElytraArmorSwitch": "在地面时自动穿盔甲，在空中使用鞘翅",
     "ElytraUnbreak": "通过自动切换鞘翅来防止耐久消耗，并可选自动使用烟花",
-    "Printer": "读取 .litematic 投影文件并在你身边重建，无需安装 Litematica"
+    "Printer": "读取 .litematic 投影文件并在你身边重建，无需安装 Litematica",
+    "AutoTreeChop": "自动砍伐周围的整棵树，可选从上往下、自动换斧、等待掉落",
+    "VanityESP": "高亮带地图的物品展示框与旗帜，方便找藏宝点",
+    "ThreeCCheck": "查询 3c3u.info 的玩家总在线时长，低于阈值判定为萌新"
   },
   "SETTING_NAMES": {
     "Horizontal": "水平击退比例",
@@ -374,6 +389,20 @@
     "MirrorZ": "Z 轴镜像",
     "DelayTicks": "放置间隔（tick）",
     "DirtForGrass": "泥土代替草方块",
-    "Debug": "调试输出"
+    "Debug": "调试输出",
+    "TopDown": "从上往下",
+    "WaitDrops": "等待掉落",
+    "DropWaitTicks": "掉落等待 tick",
+    "ItemFrames": "物品展示框",
+    "Banners": "旗帜",
+    "FillColor": "填充颜色",
+    "OutlineColor": "边框颜色",
+    "Fade": "淡出",
+    "FadeTime": "淡出时长",
+    "Query": "立即查询",
+    "ThresholdHours": "萌新时长阈值（小时）",
+    "AutoQuery": "范围内自动查询",
+    "AutoRange": "自动查询范围（米）",
+    "ChatResult": "聊天栏输出结果"
   }
 }

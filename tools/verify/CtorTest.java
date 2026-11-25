@@ -16,11 +16,14 @@ public class CtorTest {
             "AutoDigFeetModule",
             "AutoTouchFireModule",
             "PrinterModule",
+            "AutoTreeChopModule",
             "HoverModule",
             "ElytraArmorSwitchModule",
             "ElytraUnbreakModule",
             "AutoFollowPlayerModule",
             "AutoBlockCenterModule",
+            "VanityEspModule",
+            "ThreeCCheckModule",
         };
         int ok = 0;
         int fail = 0;
