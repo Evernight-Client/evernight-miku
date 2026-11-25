@@ -92,7 +92,7 @@ def main():
     source = find_mappings()
     lines = open(source, encoding="utf-8").read().split("\n")
     official_to_intermediary = {}
-    intermediary_to_named = {}
+    official_to_named = {}
     rows = []
     for line in lines[1:]:
         if not line:
@@ -100,7 +100,7 @@ def main():
         parts = line.split("\t")
         if parts[0] == "c":
             official_to_intermediary[parts[1]] = parts[2]
-            intermediary_to_named[parts[2]] = parts[3]
+            official_to_named[parts[1]] = parts[3]
             rows.append(("c", parts[1], parts[2], parts[3]))
         elif parts[0] == "":
             rows.append((parts[1], parts[2], parts[4], parts[5]))
@@ -128,7 +128,21 @@ def main():
             else:
                 # descriptor in the *source* namespace, then source name, then target name
                 handle.write("\t%s\t%s\t%s\t%s\n"
-                             % (row[0], remap_types(row[1], intermediary_to_named), row[3], row[2]))
+                             % (row[0], remap_types(row[1], official_to_named), row[3], row[2]))
+
+    # Sanity check: descriptors must be written in the *source* namespace. If they still contain
+    # official (obfuscated) names, tiny-remapper silently keeps the named member names and the jar
+    # only fails at runtime with NoSuchMethodError.
+    sample = open(named2int, encoding="utf-8").read()
+    if "()Lnet/minecraft/client/Minecraft;" not in sample:
+        raise SystemExit("generated named2int.tiny has wrong descriptors; refusing to continue")
+
+    # Sanity check: descriptors must be written in the *source* namespace. If they still contain
+    # official (obfuscated) names, tiny-remapper silently keeps the named member names and the jar
+    # only fails at runtime with NoSuchMethodError.
+    sample = open(named2int, encoding="utf-8").read()
+    if "()Lnet/minecraft/client/Minecraft;" not in sample:
+        raise SystemExit("generated named2int.tiny has wrong descriptors; refusing to continue")
 
     print("[3/4] downloading evernight-%s.jar" % EVERNIGHT_VERSION)
     target = os.path.join(libs, "evernight-%s.jar" % EVERNIGHT_VERSION)
